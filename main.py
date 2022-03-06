@@ -19,6 +19,7 @@ class Map():
         self.sc = screen
         self.img = pygame.image.load("./assets/map_.png")
         self.img.convert()
+        self.img_backup = self.img
         self.sc.blit(self.img, (start_x, start_y))
         self.dragging = False
         self.x = start_x
@@ -32,7 +33,7 @@ class Map():
         self.y = Y
 
     def place(self, X, Y):
-        self.sc.fill(BGCOLOR)
+        # self.sc.fill(BGCOLOR)
         self.sc.blit(self.img, (X, Y))
 
     def go_to(self, X, Y):
@@ -51,8 +52,8 @@ class Map():
         # For example if dsize is 3
         # Then the new_size will be 1.03 * old_size
         if self.reload_image >= 10:
-            self.img = pygame.image.load("./assets/map_.png")
-            self.img.convert()
+            self.img = self.img_backup
+            self.img.convert_alpha()
         ratio = 1+dsize/100
         new_width = self.width*ratio  # Restrict from out of border
         if new_width < SCREEN_WIDTH:
@@ -84,7 +85,7 @@ class Train(pygame.sprite.Sprite):
 pygame.init()
 
 BGCOLOR = (170, 211, 223)
-BGCOLOR = (255, 255, 255)
+# BGCOLOR = (255, 255, 255)
 SCREEN_WIDTH = 1080
 SCREEN_HEIGHT = 720
 
@@ -112,9 +113,9 @@ while running:
                     offset_x = bgMap.x - mouse_x
                     offset_y = bgMap.y - mouse_y
             if event.button == 4:  # wheel up
-                bgMap.resize(3, mouse_pos=event.pos)
+                for i in range(3): bgMap.resize(3, mouse_pos=event.pos)
             if event.button == 5:  # wheel down
-                bgMap.resize(-3, mouse_pos=event.pos)
+                for i in range(3): bgMap.resize(-3, mouse_pos=event.pos)
 
         elif event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1: 
